@@ -4,23 +4,23 @@
       <div class="left-operation-container">
         <div class="component-op">
           <div class="item" @click="isVisible.dialogAdd = true">
-            <add-icon />
+            <add-icon/>
             <span>{{ $t('pages.setting.header.add') }}</span>
           </div>
           <div class="item" @click="handleAllDataEvent('enable')">
-            <check-icon />
+            <check-icon/>
             <span>{{ $t('pages.setting.header.enable') }}</span>
           </div>
           <div class="item" @click="handleAllDataEvent('disable')">
-            <poweroff-icon />
+            <poweroff-icon/>
             <span>{{ $t('pages.setting.header.disable') }}</span>
           </div>
           <div class="item" @click="handleAllDataEvent('delete')">
-            <remove-icon />
+            <remove-icon/>
             <span>{{ $t('pages.setting.header.delete') }}</span>
           </div>
           <div class="item" @click="handleAllDataEvent('check')">
-            <refresh-icon />
+            <refresh-icon/>
             <span>{{ $t('pages.setting.header.check') }}</span>
           </div>
         </div>
@@ -28,25 +28,28 @@
       <div class="right-operation-container">
         <div class="search">
           <t-input v-model="searchValue" :placeholder="$t('pages.setting.header.search')" clearable
-            @enter="refreshEvent(true)" @clear="refreshEvent(true)" class="search-bar">
+                   @enter="refreshEvent(true)" @clear="refreshEvent(true)" class="search-bar">
             <template #prefix-icon>
-              <search-icon size="16px" />
+              <search-icon size="16px"/>
             </template>
           </t-input>
         </div>
       </div>
     </div>
     <t-table row-key="id" height="calc(100vh - 172px)" :data="siteTableConfig.data" :sort="siteTableConfig.sort"
-      :filter-value="siteTableConfig.filter" :columns="COLUMNS" :hover="true" :pagination="pagination"
-      @sort-change="rehandleSortChange" @filter-change="rehandleFilterChange" @select-change="rehandleSelectChange"
-      @page-change="rehandlePageChange">
+             :filter-value="siteTableConfig.filter" :columns="COLUMNS" :hover="true" :pagination="pagination"
+             @sort-change="rehandleSortChange" @filter-change="rehandleFilterChange"
+             @select-change="rehandleSelectChange"
+             @page-change="rehandlePageChange">
       <template #name="{ row }">
-        <t-badge v-if="row.id === siteTableConfig.default" size="small" :offset="[0, 3]" count="默" dot>{{ row.name
-          }}</t-badge>
+        <t-badge v-if="row.id === siteTableConfig.default" size="small" :offset="[0, 3]" count="默" dot>{{
+            row.name
+          }}
+        </t-badge>
         <span v-else>{{ row.name }}</span>
       </template>
       <template #isActive="{ row }">
-        <t-switch v-model="row.isActive" @change="switchStatus(row)" />
+        <t-switch v-model="row.isActive" @change="switchStatus(row)"/>
       </template>
       <template #resource="{ row }">
         <span v-if="row.resource > 0">{{ row.resource }}</span>
@@ -55,11 +58,17 @@
       </template>
       <template #search="{ row }">
         <t-tag v-if="row.search === 0" shape="round" theme="danger" variant="light-outline">{{
-          $t('pages.setting.table.site.close') }}</t-tag>
+            $t('pages.setting.table.site.close')
+          }}
+        </t-tag>
         <t-tag v-else-if="row.search === 1" theme="success" shape="round" variant="light-outline">{{
-          $t('pages.setting.table.site.together') }}</t-tag>
+            $t('pages.setting.table.site.together')
+          }}
+        </t-tag>
         <t-tag v-else-if="row.search === 2" theme="warning" shape="round" variant="light-outline">{{
-          $t('pages.setting.table.site.local') }}</t-tag>
+            $t('pages.setting.table.site.local')
+          }}
+        </t-tag>
       </template>
       <template #type="{ row }">
         <span v-if="row.type === 0">cms[xml]</span>
@@ -74,8 +83,10 @@
       <template #op="slotProps">
         <t-space>
           <t-link theme="primary" @click="defaultEvent(slotProps.row)">{{ $t('pages.setting.table.default') }}</t-link>
-          <t-link theme="primary" @click="checkSingleEvent(slotProps.row)">{{ $t('pages.setting.table.check')
-            }}</t-link>
+          <t-link theme="primary" @click="checkSingleEvent(slotProps.row)">{{
+              $t('pages.setting.table.check')
+            }}
+          </t-link>
           <t-link theme="primary" @click="editEvent(slotProps)">{{ $t('pages.setting.table.edit') }}</t-link>
           <t-popconfirm :content="$t('pages.setting.table.deleteTip')" @confirm="removeEvent(slotProps.row)">
             <t-link theme="danger">{{ $t('pages.setting.table.delete') }}</t-link>
@@ -83,25 +94,25 @@
         </t-space>
       </template>
     </t-table>
-    <dialog-add-view v-model:visible="isVisible.dialogAdd" :group="siteTableConfig.group" @add-table-data="tableAdd" />
-    <dialog-edit-view v-model:visible="isVisible.dialogEdit" :data="formData" :group="siteTableConfig.group" />
+    <dialog-add-view v-model:visible="isVisible.dialogAdd" :group="siteTableConfig.group" @add-table-data="tableAdd"/>
+    <dialog-edit-view v-model:visible="isVisible.dialogEdit" :data="formData" :group="siteTableConfig.group"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import _ from 'lodash';
 import PQueue from 'p-queue';
-import { AddIcon, CheckIcon, PoweroffIcon, RefreshIcon, RemoveIcon, SearchIcon } from 'tdesign-icons-vue-next';
-import { MessagePlugin } from 'tdesign-vue-next';
-import { onActivated, onMounted, ref, reactive, watch } from 'vue';
+import {AddIcon, CheckIcon, PoweroffIcon, RefreshIcon, RemoveIcon, SearchIcon} from 'tdesign-icons-vue-next';
+import {MessagePlugin} from 'tdesign-vue-next';
+import {onActivated, onMounted, reactive, ref, watch} from 'vue';
 
-import { t } from '@/locales';
-import { setDefault } from '@/api/setting';
-import { fetchSitePage, fetchSiteGroup, updateSiteItem, updateSiteStatus, delSiteItem } from '@/api/site';
-import { checkValid } from '@/utils/cms';
+import {t} from '@/locales';
+import {setDefault} from '@/api/setting';
+import {delSiteItem, fetchSiteGroup, fetchSitePage, updateSiteItem, updateSiteStatus} from '@/api/site';
+import {checkValid} from '@/utils/cms';
 import emitter from '@/utils/emitter';
 
-import { COLUMNS } from './constants';
+import {COLUMNS} from './constants';
 
 import DialogAddView from './components/DialogAdd.vue';
 import DialogEditView from './components/DialogEdit.vue';
@@ -122,6 +133,7 @@ const pagination = reactive({
   defaultCurrent: 1,
   pageSize: 20,
   current: 1,
+  pageSizeOptions: [5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
 });
 
 const siteTableConfig = ref({
@@ -136,7 +148,7 @@ const siteTableConfig = ref({
   group: []
 });
 
-const queue = new PQueue({ concurrency: 5 }); // 设置并发限制为5
+const queue = new PQueue({concurrency: 5}); // 设置并发限制为5
 
 const rehandleSelectChange = (val) => {
   siteTableConfig.value.select = val;
@@ -149,8 +161,8 @@ watch(
       emitter.emit('refreshFilmConfig', 111);
     }
   }, {
-  deep: true
-}
+    deep: true
+  }
 );
 
 // Business Processing
@@ -224,17 +236,17 @@ const refreshEvent = (page = false) => {
   getData();
   getGroup();
   if (page) pagination.current = 1;
-  if (siteTableConfig.value.filter) siteTableConfig.value.filter = { type: [] };
+  if (siteTableConfig.value.filter) siteTableConfig.value.filter = {type: []};
 };
 
 // op
 const checkAllSite = async (select) => {
   try {
     let checkData: any = [];
-    const { data } = siteTableConfig.value;
+    const {data} = siteTableConfig.value;
 
     select.forEach((item) => {
-      const res = _.find(data, { id: item })
+      const res = _.find(data, {id: item})
       checkData.push(res)
     });
 
@@ -250,15 +262,17 @@ const checkSingleEvent = async (row, all = false) => {
   if (row.type === 7 || row.type === 8) {
     row.resource = -1;
   } else {
-    const { status, resource } = await checkValid(row); // 检测状态
+    const {status, resource} = await checkValid(row); // 检测状态
     row.isActive = isActive = status; // 检测是否开启变更状态
     row.resource = resource;
-    updateSiteItem(row.id, { isActive: row.isActive });
-  };
+    updateSiteItem(row.id, {isActive: row.isActive});
+  }
+  ;
 
   if (!all) {
     MessagePlugin.success(t('pages.setting.form.success'));
-  };
+  }
+  ;
 
   return isActive;
 };
@@ -307,13 +321,13 @@ const editEvent = (row) => {
 
 const switchStatus = async (row) => {
   console.log(row.isActive);
-  updateSiteItem(row.id, { isActive: row.isActive });
+  updateSiteItem(row.id, {isActive: row.isActive});
 };
 
 const tableUpdateIsActive = (select, isActiveValue: boolean) => {
   select.forEach((itemId) => {
-    const item: any = _.find(siteTableConfig.value.data, { id: itemId });
-    const rawTtem: any = _.find(siteTableConfig.value.rawData, { id: itemId });
+    const item: any = _.find(siteTableConfig.value.data, {id: itemId});
+    const rawTtem: any = _.find(siteTableConfig.value.rawData, {id: itemId});
     if (item) item.isActive = isActiveValue;
     if (item) rawTtem.isActive = isActiveValue;
   });
@@ -327,7 +341,7 @@ const tableDelete = (select) => {
 };
 
 const tableAdd = (item) => {
-  let { filter = { type: [] }, data = [] as any, rawData = [] as any } = siteTableConfig.value;
+  let {filter = {type: []}, data = [] as any, rawData = [] as any} = siteTableConfig.value;
   const filterType: any = filter?.type || [];
 
   const shouldFilter = filterType.length > 0 && !filterType.includes(item.type);
@@ -337,7 +351,7 @@ const tableAdd = (item) => {
     data = [...data, item];
   }
   rawData = [...rawData, item];
-  siteTableConfig.value = { ...siteTableConfig.value, data, rawData };
+  siteTableConfig.value = {...siteTableConfig.value, data, rawData};
 };
 
 const removeEvent = async (row) => {
@@ -355,7 +369,7 @@ const removeEvent = async (row) => {
 
 const handleAllDataEvent = async (type) => {
   try {
-    const { select } = siteTableConfig.value;
+    const {select} = siteTableConfig.value;
     if (select.length === 0) {
       MessagePlugin.warning(t('pages.setting.message.noSelectData'));
       return;
