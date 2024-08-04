@@ -7,6 +7,8 @@
   <a href="https://github.com/Hiram-Wong/ZyPlayer/releases" target="_blank">下载</a>
 </p>
 
+# 此fork相较于主线仅修改了复制链接部分,仅输出兼容N_m3u8DL-RE的字符串
+
 # 软件介绍
 
 ZyPlayer是一款采用现代化技术栈开发的高颜值媒体播放器，它基于 `electron-vite` 框架，集成了 `TDesign` UI 组件库与 `Vue3` 全家桶，以清新的薄荷绿为主题，旨在为用户提供流畅的跨平台娱乐体验。
