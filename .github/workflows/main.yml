@@ -1,9 +1,7 @@
 name: Build/release
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   release:
@@ -11,8 +9,8 @@ jobs:
 
     strategy:
       matrix:
-        # os: [windows-latest, macos-latest, ubuntu-latest]
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        #os: [windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
