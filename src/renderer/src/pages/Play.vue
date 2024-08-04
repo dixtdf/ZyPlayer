@@ -65,6 +65,7 @@
         <system-control class="mg-left window"/>
       </div>
     </div>
+    <dialog-download-view ref="dialogDownloadView" :data="downloadDialogData"/>
     <div class="container-main">
       <div class="player">
         <div class="container-player" :class='["subject", isVisible.aside ? "subject-ext" : ""]'>
@@ -171,10 +172,10 @@
                   <span class="tip">{{ $t('pages.player.film.like') }}</span>
                 </div>
                 <div class="dot"></div>
-                <div class="func-item download" @click="downloadEvent">
-                  <download-icon class="icon"/>
-                  <span class="tip">{{ $t('pages.player.film.download') }}</span>
-                </div>
+                <!--                <div class="func-item download" @click="downloadEvent">-->
+                <!--                  <download-icon class="icon"/>-->
+                <!--                  <span class="tip">{{ $t('pages.player.film.download') }}</span>-->
+                <!--                </div>-->
                 <div class="dot"></div>
                 <div class="func-item share" @click="shareEvent">
                   <share-popup v-model:visible="isVisible.share" :data="shareData">
@@ -187,8 +188,6 @@
                   </share-popup>
                 </div>
               </div>
-              <dialog-download-view ref="dialogDownloadView" :data="downloadDialogData"
-                                    v-model:visible="isVisible.download"/>
             </div>
             <div class="anthology-contents-scroll">
               <div class="box-anthology-header">
@@ -375,7 +374,6 @@ import {
   ChevronRightIcon,
   ChevronRightSIcon,
   CloseIcon,
-  DownloadIcon,
   HeartFilledIcon,
   HeartIcon,
   HomeIcon,
@@ -564,6 +562,9 @@ const renderLoading = () => {
 onMounted(() => {
   initPlayer();
   minMaxEvent();
+  nextTick().then(() => {
+    downloadEvent();
+  });
 });
 
 // 加载播放器
@@ -1438,7 +1439,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
   }
 
   .container-main {
-    height: calc(100% - var(--td-comp-size-xxxl));
+    height: calc(100vh - 220px);
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -1717,7 +1718,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
 
         .anthology-contents-scroll {
           position: relative;
-          height: calc(100vh - 56px - 10px - 111px);
+          height: calc(100vh - 56px - 10px - 111px - 160px);
           overflow-y: auto;
           overflow-x: hidden;
 
@@ -2146,7 +2147,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
     }
 
     .container-main {
-      height: 100vh;
+      height: calc(100vh - 220px);
 
       .player {
         .dock-show {

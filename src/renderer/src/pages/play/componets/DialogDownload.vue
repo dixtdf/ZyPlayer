@@ -1,31 +1,26 @@
 <template>
-  <t-dialog v-model:visible="formVisible" :header="$t('pages.player.download.title')" width="4096" placement="center"
-            :confirm-btn="$t('pages.player.download.copy')" :on-confirm="copyDownloadUrl" :cancel-btn="null">
-    <template #body>
-      <div class="download-warp">
-        <div class="source-warp">
-          <t-select v-model="downloadSource" :placeholder="$t('pages.player.download.soureceSelect')" size="small"
-                    style="width: 200px; display: inline-block" @change="downloadSourceChange">
-            <t-option v-for="(_, key) in formData.season" :key="key" :value="key">{{ key }}</t-option>
-          </t-select>
-          <t-button size="small" theme="default" @click="copyCurrentUrl">{{
-              $t('pages.player.download.copyCurrentUrl')
-            }}
-          </t-button>
-        </div>
-        <div class="content-warp">
-          <t-textarea v-model="downloadText" :autosize="{ minRows: 3, maxRows: 5 }"/>
-        </div>
-        <div class="tip-warp">
-          <span>{{ $t('pages.player.download.recommendDownloaderTip') }}</span>
-          <t-link theme="primary" underline href="https://github.com/HeiSir2014/M3U8-Downloader/releases/"
-                  target="_blank">
-            {{ $t('pages.player.download.recommendDownloaderName') }}
-          </t-link>
-        </div>
-      </div>
-    </template>
-  </t-dialog>
+  <div class="download-warp">
+    <div class="source-warp">
+      <t-select v-model="downloadSource" :placeholder="$t('pages.player.download.soureceSelect')" size="small"
+                style="width: 200px; display: inline-block" @change="downloadSourceChange">
+        <t-option v-for="(_, key) in formData.season" :key="key" :value="key">{{ key }}</t-option>
+      </t-select>
+      <t-button size="small" theme="default" @click="copyCurrentUrl">{{
+          $t('pages.player.download.copyCurrentUrl')
+        }}
+      </t-button>
+    </div>
+    <div class="content-warp">
+      <t-textarea v-model="downloadText" :autosize="{ minRows: 3, maxRows: 5 }"/>
+    </div>
+    <div class="tip-warp">
+      <span>{{ $t('pages.player.download.recommendDownloaderTip') }}</span>
+      <t-link theme="primary" underline href="https://github.com/HeiSir2014/M3U8-Downloader/releases/"
+              target="_blank">
+        {{ $t('pages.player.download.recommendDownloaderName') }}
+      </t-link>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
