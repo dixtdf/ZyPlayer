@@ -9,8 +9,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-        #os: [windows-latest, ubuntu-latest]
+        #os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -33,7 +33,7 @@ jobs:
           # build_script_name: 'electron:prebuild'
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          release: true
 
       - name: Upload Artifact (macOS)
         uses: actions/upload-artifact@v4
