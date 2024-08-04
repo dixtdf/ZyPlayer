@@ -143,6 +143,20 @@ const copyCurrentUrl = () => {
 
   formVisible.value = false;
 };
+
+const init = () => {
+  for (let valueKey in formData.value.season) {
+    downloadSource.value = valueKey;
+    if (downloadSource.value) {
+      break;
+    }
+  }
+  downloadSourceChange();
+}
+
+defineExpose({
+  init
+});
 </script>
 
 <style lang="less" scoped>

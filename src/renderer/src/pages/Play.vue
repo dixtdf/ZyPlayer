@@ -187,7 +187,8 @@
                   </share-popup>
                 </div>
               </div>
-              <dialog-download-view :data="downloadDialogData" v-model:visible="isVisible.download"/>
+              <dialog-download-view ref="dialogDownloadView" :data="downloadDialogData"
+                                    v-model:visible="isVisible.download"/>
             </div>
             <div class="anthology-contents-scroll">
               <div class="box-anthology-header">
@@ -374,53 +375,51 @@ import {
   ChevronRightIcon,
   ChevronRightSIcon,
   CloseIcon,
-  Tv1Icon,
   DownloadIcon,
-  HeartIcon,
   HeartFilledIcon,
+  HeartIcon,
   HomeIcon,
   LoadingIcon,
   OrderAscendingIcon,
   OrderDescendingIcon,
   PinFilledIcon,
   PinIcon,
-  StarIcon,
   SettingIcon,
-  Share1Icon
+  StarIcon,
+  Tv1Icon
 } from 'tdesign-icons-vue-next';
 import {MessagePlugin} from 'tdesign-vue-next';
 import InfiniteLoading from 'v3-infinite-loading';
-import {computed, onMounted, ref, reactive, shallowRef} from 'vue';
+import {computed, nextTick, onMounted, reactive, ref, shallowRef} from 'vue';
 
 import {fetchChannelList} from '@/api/iptv';
 import {checkUrlIpv6, getLocalStorage} from '@/utils/tool';
 import {
+  offPlayerBarrage,
+  offPlayerTimeUpdate,
   playerBarrage,
   playerCreate,
   playerDestroy,
   playerNext,
   playerSeek,
-  playerPause,
-  playerTimeUpdate,
-  offPlayerTimeUpdate,
-  offPlayerBarrage
+  playerTimeUpdate
 } from '@/utils/common/player';
 import {
-  fetchBingeData,
-  putBingeData,
-  fetchHistoryData,
-  putHistoryData,
   fetchAnalyzeData,
   fetchBarrageData,
-  playHelper,
-  reverseOrderHelper,
+  fetchBingeData,
   fetchDoubanRecommendHelper,
+  fetchHistoryData,
   fetchRecommendSearchHelper,
-  formatName,
-  formatIndex,
   formatContent,
+  formatIndex,
+  formatName,
+  formatReverseOrder,
   formatSeason,
-  formatReverseOrder
+  playHelper,
+  putBingeData,
+  putHistoryData,
+  reverseOrderHelper
 } from '@/utils/common/film';
 import {__jsEvalReturn} from '@/utils/alist_open';
 import {fetchChannelEpg} from '@/utils/channel';
@@ -560,6 +559,7 @@ const renderLoading = () => {
     </div>
   );
 };
+
 
 onMounted(() => {
   initPlayer();
@@ -1091,6 +1091,8 @@ const shareEvent = () => {
   isVisible.share = true;
 };
 
+const dialogDownloadView = ref(null)
+
 //下载 dialog 数据
 const downloadEvent = () => {
   downloadDialogData.value = {
@@ -1099,6 +1101,9 @@ const downloadEvent = () => {
     info: info
   };
   isVisible.download = true;
+  nextTick().then(() => {
+    dialogDownloadView.value.init();
+  });
 };
 
 // 初始化iptv
