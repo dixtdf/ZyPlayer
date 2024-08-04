@@ -2,9 +2,9 @@
   <div class="container">
     <div class="container-header" :class="!isVisible.macMaximize ? 'drag' : 'no-drag'">
       <div class="left no-drag"
-        :style="{ 'padding-left': platform === 'darwin' && !isVisible.macMaximize ? '68px' : '0' }">
+           :style="{ 'padding-left': platform === 'darwin' && !isVisible.macMaximize ? '68px' : '0' }">
         <div class="open-main-win" @click="openMainWinEvent">
-          <home-icon />
+          <home-icon/>
           <span class="tip-gotomain">{{ $t('pages.player.header.backMain') }}</span>
         </div>
       </div>
@@ -16,26 +16,26 @@
         <div class="system-functions">
           <div v-if="type === 'film'" class="setting system-function">
             <t-button theme="default" shape="square" variant="text" @click="isSettingVisible = true">
-              <setting-icon />
+              <setting-icon/>
             </t-button>
             <t-dialog v-model:visible="isSettingVisible" :header="$t('pages.player.setting.title')" placement="center"
-              width="508" :footer=false>
+                      width="508" :footer=false>
               <div class="setting-warp">
                 <div class="setting-item-warp">
                   <span>{{ $t('pages.player.setting.autoSkip') }}</span>
-                  <t-switch v-model="set.skipStartEnd" />
+                  <t-switch v-model="set.skipStartEnd"/>
                 </div>
                 <div v-if="set.skipStartEnd" class="setting-item-warp">
                   <div class="skip-time-in-start">
                     <t-input-number v-model="skipConfig.skipTimeInStart" theme="normal" align="right"
-                      @change="skipTimeInEndChange">
+                                    @change="skipTimeInEndChange">
                       <template #label>{{ $t('pages.player.setting.skipStart') }}</template>
                       <template #suffix>{{ $t('pages.player.setting.skipSeconds') }}</template>
                     </t-input-number>
                   </div>
                   <div class="skip-time-in-end">
                     <t-input-number v-model="skipConfig.skipTimeInEnd" theme="normal" align="right"
-                      @change="skipTimeInEndChange">
+                                    @change="skipTimeInEndChange">
                       <template #label>{{ $t('pages.player.setting.skipEnd') }}</template>
                       <template #suffix>{{ $t('pages.player.setting.skipSeconds') }}</template>
                     </t-input-number>
@@ -43,11 +43,11 @@
                 </div>
                 <div class="setting-item-warp">
                   <span>{{ $t('pages.player.setting.autoNext') }}</span>
-                  <t-switch v-model="set.preloadNext" />
+                  <t-switch v-model="set.preloadNext"/>
                 </div>
                 <div class="setting-item-warp">
                   <span>{{ $t('pages.player.setting.skipAd') }}</span>
-                  <t-switch v-model="set.skipAd" />
+                  <t-switch v-model="set.skipAd"/>
                 </div>
                 <div class="tip-warp">
                   <span>{{ $t('pages.player.setting.tip') }}</span>
@@ -57,12 +57,12 @@
           </div>
           <div class="staple system-function">
             <t-button theme="default" shape="square" variant="text" @click="toggleAlwaysOnTop">
-              <pin-filled-icon v-if="isVisible.pin" />
-              <pin-icon v-else />
+              <pin-filled-icon v-if="isVisible.pin"/>
+              <pin-icon v-else/>
             </t-button>
           </div>
         </div>
-        <system-control class="mg-left window" />
+        <system-control class="mg-left window"/>
       </div>
     </div>
     <div class="container-main">
@@ -75,8 +75,8 @@
           </div>
         </div>
         <div class="btn-box dock-show" @click="isVisible.aside = !isVisible.aside">
-          <chevron-left-icon v-if="isVisible.aside" class="btn-icon" />
-          <chevron-right-icon v-else class="btn-icon" />
+          <chevron-left-icon v-if="isVisible.aside" class="btn-icon"/>
+          <chevron-right-icon v-else class="btn-icon"/>
         </div>
       </div>
       <div class="aside" v-show="!isVisible.aside">
@@ -104,7 +104,7 @@
                         </span>
                       </div>
                     </div>
-                    <t-divider dashed style="margin: 5px 0" />
+                    <t-divider dashed style="margin: 5px 0"/>
                   </div>
                 </div>
               </t-tab-panel>
@@ -114,19 +114,22 @@
                     <div class="content-item content-item-start" @click="changeChannelEvent(item)">
                       <div class="logo-wrap">
                         <t-image class="logo" fit="contain" :src='generateLogo(item)'
-                          :style="{ width: '64px', height: '32px', maxHeight: '32px', background: 'none' }" :lazy="true"
-                          :loading="renderLoading" :error="renderError">
+                                 :style="{ width: '64px', height: '32px', maxHeight: '32px', background: 'none' }"
+                                 :lazy="true"
+                                 :loading="renderLoading" :error="renderError">
                         </t-image>
                       </div>
                       <div class="title-wrap nowrap title-warp-channel">{{ item["name"] }}</div>
                       <div class="status-wrap">
                         <span :class='item["id"] === info["id"] ? "playing" : "unplay"'>
-                          {{ item["id"] === info["id"] ? $t('pages.player.status.playing') :
-                            $t('pages.player.status.unplay') }}
+                          {{
+                            item["id"] === info["id"] ? $t('pages.player.status.playing') :
+                              $t('pages.player.status.unplay')
+                          }}
                         </span>
                       </div>
                     </div>
-                    <t-divider dashed style="margin: 5px 0" />
+                    <t-divider dashed style="margin: 5px 0"/>
                   </div>
                   <infinite-loading style="text-align: center; color: #fdfdfd" :distance="200" @infinite="load">
                     <template #complete>{{ $t('pages.player.infiniteLoading.complete') }}</template>
@@ -144,32 +147,32 @@
                 <div class="title-text nowrap">{{ info["vod_name"] }}</div>
                 <div class="title-desc" @click="active.profile = true">
                   <span class="title-unfold">{{ $t('pages.player.film.desc') }}</span>
-                  <chevron-right-s-icon />
+                  <chevron-right-s-icon/>
                 </div>
               </div>
               <div class="hot-block nowrap">
                 <span class="rate">
-                  <star-icon />
+                  <star-icon/>
                   {{ info["vod_score"] ? info["vod_score"] : '0.0' }}
                 </span>
-                <t-divider layout="vertical" v-show='info["type_name"]' />
+                <t-divider layout="vertical" v-show='info["type_name"]'/>
                 <span v-show='info["type_name"]' class="nowrap">{{ info["type_name"] }}</span>
-                <t-divider layout="vertical" v-show='info["vod_area"]' />
+                <t-divider layout="vertical" v-show='info["vod_area"]'/>
                 <span v-show='info["vod_area"]' class="nowrap">{{ info["vod_area"] }}</span>
-                <t-divider layout="vertical" v-show='info["vod_year"]' />
+                <t-divider layout="vertical" v-show='info["vod_year"]'/>
                 <span v-show='info["vod_year"]' class="nowrap">{{ info["vod_year"] }}</span>
               </div>
               <div class="function">
                 <div class="func-item like" @click="putBinge(false)">
                   <span>
-                    <heart-icon class="icon" v-if="isVisible.binge" />
-                    <heart-filled-icon class="icon" v-else />
+                    <heart-icon class="icon" v-if="isVisible.binge"/>
+                    <heart-filled-icon class="icon" v-else/>
                   </span>
                   <span class="tip">{{ $t('pages.player.film.like') }}</span>
                 </div>
                 <div class="dot"></div>
                 <div class="func-item download" @click="downloadEvent">
-                  <download-icon class="icon" />
+                  <download-icon class="icon"/>
                   <span class="tip">{{ $t('pages.player.film.download') }}</span>
                 </div>
                 <div class="dot"></div>
@@ -177,14 +180,14 @@
                   <share-popup v-model:visible="isVisible.share" :data="shareData">
                     <template #customize>
                       <div style="display: flex;flex-direction: row;align-items: center;">
-                        <share-1-icon class="icon" />
+                        <share-1-icon class="icon"/>
                         <span class="tip">{{ $t('pages.player.film.share') }}</span>
                       </div>
                     </template>
                   </share-popup>
                 </div>
               </div>
-              <dialog-download-view :data="downloadDialogData" v-model:visible="isVisible.download" />
+              <dialog-download-view :data="downloadDialogData" v-model:visible="isVisible.download"/>
             </div>
             <div class="anthology-contents-scroll">
               <div class="box-anthology-header">
@@ -195,12 +198,12 @@
                       <t-button size="small" theme="default" variant="text" auto-width>
                         <span class="title">{{ $t('pages.player.film.line') }}</span>
                         <template #suffix>
-                          <chevron-down-icon size="16" />
+                          <chevron-down-icon size="16"/>
                         </template>
                       </t-button>
                       <t-dropdown-menu>
                         <t-dropdown-item v-for="(_, key, index) in season" :key="index" :value="key"
-                          @click="(options) => switchLineEvent(options.value as string)">
+                                         @click="(options) => switchLineEvent(options.value as string)">
                           <span :class="[key as any === active.flimSource ? 'active' : '']">{{ key }}</span>
                         </t-dropdown-item>
                       </t-dropdown-menu>
@@ -211,12 +214,12 @@
                       <t-button size="small" theme="default" variant="text" auto-width>
                         <span class="title">{{ $t('pages.player.film.analyze') }}</span>
                         <template #suffix>
-                          <chevron-down-icon size="16" />
+                          <chevron-down-icon size="16"/>
                         </template>
                       </t-button>
                       <t-dropdown-menu>
                         <t-dropdown-item v-for="item in dataAnalyze.active" :key="item.id" :value="item.id"
-                          @click="(options) => switchAnalyzeEvent(options.value as string)">
+                                         @click="(options) => switchAnalyzeEvent(options.value as string)">
                           <span :class="[item.id === active.analyzeId ? 'active' : '']">{{ item.name }}</span>
                         </t-dropdown-item>
                       </t-dropdown-menu>
@@ -225,20 +228,21 @@
                 </div>
                 <div class="right">
                   <div class="box-anthology-reverse-order" @click="reverseOrderEvent">
-                    <order-descending-icon v-if="isVisible.reverseOrder" size="1.2em" />
-                    <order-ascending-icon v-else size="1.2em" />
+                    <order-descending-icon v-if="isVisible.reverseOrder" size="1.2em"/>
+                    <order-ascending-icon v-else size="1.2em"/>
                   </div>
                 </div>
               </div>
               <div class="listbox">
                 <div class="tag-container">
                   <div v-for="(item, index) in season?.[active.flimSource]" :key="item"
-                    :class='["mainVideo-num", item === active.filmIndex ? "mainVideo-selected" : ""]'
-                    @click="changeEvent(item)">
+                       :class='["mainVideo-num", item === active.filmIndex ? "mainVideo-selected" : ""]'
+                       @click="changeEvent(item)">
                     <t-tooltip :content="formatName(item)">
                       <div class="mainVideo_inner">
-                        {{ formatReverseOrder(isVisible.reverseOrder ? 'positive' : 'negative', index,
-                          season?.[active.flimSource]?.length)
+                        {{
+                          formatReverseOrder(isVisible.reverseOrder ? 'positive' : 'negative', index,
+                            season?.[active.flimSource]?.length)
                         }}
                         <div class="playing"></div>
                       </div>
@@ -270,7 +274,8 @@
                   <div v-for="content in recommend" :key='content["id"]' class="videoItem-card">
                     <div class="videoItem-left" @click="recommendEvent(content)">
                       <t-image class="card-main-item" :src='content["vod_pic"]'
-                        :style="{ width: '126px', height: '70px', 'border-radius': '5px' }" :lazy="true" fit="cover">
+                               :style="{ width: '126px', height: '70px', 'border-radius': '5px' }" :lazy="true"
+                               fit="cover">
                       </t-image>
                     </div>
                     <div class="videoItem-right">
@@ -284,14 +289,14 @@
           <div v-else class="profile">
             <div class="side-head">
               <div class="title">{{ $t('pages.player.film.desc') }}</div>
-              <close-icon size="1.3em" class="icon" @click="active.profile = false" />
+              <close-icon size="1.3em" class="icon" @click="active.profile = false"/>
             </div>
-            <t-divider dashed style="margin: 5px 0" />
+            <t-divider dashed style="margin: 5px 0"/>
             <div class="side-body scroll-y ">
               <div class="card">
                 <div class="cover">
                   <t-image class="card-main-item" :src='info["vod_pic"]'
-                    :style="{ width: '100%', height: '100%', 'border-radius': '5px' }" :lazy="true" fit="cover" />
+                           :style="{ width: '100%', height: '100%', 'border-radius': '5px' }" :lazy="true" fit="cover"/>
                 </div>
                 <div class="content">
                   <div class="name">{{ info["vod_name"] }}</div>
@@ -331,18 +336,20 @@
                       <div class="content-item content-item-start" @click="changeDriveEvent(item)">
                         <div class="logo-wrap">
                           <t-image class="logo" fit="cover" :src='item["thumb"]'
-                            :style="{ width: '64px', height: '28px', background: 'none', borderRadius: '6px' }"
-                            :lazy="true" :loading="renderLoading" :error="renderError" />
+                                   :style="{ width: '64px', height: '28px', background: 'none', borderRadius: '6px' }"
+                                   :lazy="true" :loading="renderLoading" :error="renderError"/>
                         </div>
                         <div class="title-wrap nowrap">{{ item["name"] }}</div>
                         <div class="status-wrap">
                           <span :class='info["name"] === item["name"] ? "playing" : "unplay"'>
-                            {{ item["name"] === info["name"] ? $t('pages.player.status.playing') :
-                              $t('pages.player.status.unplay') }}
+                            {{
+                              item["name"] === info["name"] ? $t('pages.player.status.playing') :
+                                $t('pages.player.status.unplay')
+                            }}
                           </span>
                         </div>
                       </div>
-                      <t-divider dashed style="margin: 5px 0" />
+                      <t-divider dashed style="margin: 5px 0"/>
                     </template>
                   </div>
                 </div>
@@ -381,13 +388,23 @@ import {
   SettingIcon,
   Share1Icon
 } from 'tdesign-icons-vue-next';
-import { MessagePlugin } from 'tdesign-vue-next';
+import {MessagePlugin} from 'tdesign-vue-next';
 import InfiniteLoading from 'v3-infinite-loading';
-import { computed, onMounted, ref, reactive, shallowRef } from 'vue';
+import {computed, onMounted, ref, reactive, shallowRef} from 'vue';
 
-import { fetchChannelList } from '@/api/iptv';
-import { checkUrlIpv6, getLocalStorage } from '@/utils/tool';
-import { playerBarrage, playerCreate, playerDestroy, playerNext, playerSeek, playerPause, playerTimeUpdate, offPlayerTimeUpdate, offPlayerBarrage } from '@/utils/common/player';
+import {fetchChannelList} from '@/api/iptv';
+import {checkUrlIpv6, getLocalStorage} from '@/utils/tool';
+import {
+  playerBarrage,
+  playerCreate,
+  playerDestroy,
+  playerNext,
+  playerSeek,
+  playerPause,
+  playerTimeUpdate,
+  offPlayerTimeUpdate,
+  offPlayerBarrage
+} from '@/utils/common/player';
 import {
   fetchBingeData,
   putBingeData,
@@ -405,21 +422,21 @@ import {
   formatSeason,
   formatReverseOrder
 } from '@/utils/common/film';
-import { __jsEvalReturn } from '@/utils/alist_open';
-import { fetchChannelEpg } from '@/utils/channel';
-import { usePlayStore } from '@/store';
+import {__jsEvalReturn} from '@/utils/alist_open';
+import {fetchChannelEpg} from '@/utils/channel';
+import {usePlayStore} from '@/store';
 
 import SystemControl from '@/layouts/components/SystemControl.vue';
 import DialogDownloadView from './play/componets/DialogDownload.vue';
 import SharePopup from '../components/share-popup/index.vue';
-import { t } from '@/locales';
+import {t} from '@/locales';
 import logoIcon from '@/assets/icon.png';
 
 const remote = window.require('@electron/remote');
-const { BrowserWindow } = require('@electron/remote');
+const {BrowserWindow} = require('@electron/remote');
 
 const win = remote.getCurrentWindow();
-const { platform } = window.electron.process;
+const {platform} = window.electron.process;
 
 // 获取pinia播放数据
 const store = usePlayStore();
@@ -434,7 +451,7 @@ const set = computed(() => {
 });
 const snifferAnalyze = computed(() => {
   const analyzeSource = active.analyzeId
-    ? _.find(dataAnalyze.value.active, { id: active.analyzeId })
+    ? _.find(dataAnalyze.value.active, {id: active.analyzeId})
     : dataAnalyze.value.default;
 
   const data = {
@@ -448,7 +465,7 @@ const snifferAnalyze = computed(() => {
 const info = ref(data.value.info) as any;
 const ext = ref(data.value.ext) as any;
 
-const downloadDialogData = ref({ season: '', current: '' });
+const downloadDialogData = ref({season: '', current: '', info: null});
 
 const player = shallowRef(null); // 重要, proxy对象art播放器报错
 
@@ -506,7 +523,7 @@ const VIDEO_PROCESS_DOC = reactive({
 });
 
 const dataAnalyze = ref({
-  default: { url: '' },
+  default: {url: ''},
   flag: [],
   active: []
 }) as any;
@@ -532,14 +549,14 @@ const iptvConfig = ref({
 const renderError = () => {
   return (
     <div class="renderIcon">
-      <Tv1Icon size="1.5em" stroke-width="2" />
+      <Tv1Icon size="1.5em" stroke-width="2"/>
     </div>
   );
 };
 const renderLoading = () => {
   return (
     <div class="renderIcon">
-      <LoadingIcon size="1.5em" stroke-width="2" />
+      <LoadingIcon size="1.5em" stroke-width="2"/>
     </div>
   );
 };
@@ -552,7 +569,7 @@ onMounted(() => {
 // 加载播放器
 const createPlayer = async (url: string, videoType: string = '') => {
   tmp.url = url;
-  const { playerMode } = set.value;
+  const {playerMode} = set.value;
 
   const containers = {
     xgplayer: 'mse',
@@ -568,16 +585,18 @@ const createPlayer = async (url: string, videoType: string = '') => {
 
     // 弹幕
     const options = set.value.barrage;
-    const { flimSource, filmIndex } = active;
-    const danmuList = await fetchBarrage(tmp.sourceUrl, options, { flimSource, filmIndex });
+    const {flimSource, filmIndex} = active;
+    const danmuList = await fetchBarrage(tmp.sourceUrl, options, {flimSource, filmIndex});
     if (danmuList.length > 0) {
       if (playerMode.type === 'dplayer') {
         playerBarrage(player.value, playerMode.type, tmp.sourceUrl, options, tmp.sourceUrl);
       } else {
         playerBarrage(player.value, playerMode.type, danmuList, options, tmp.sourceUrl);
-      };
+      }
+      ;
     }
-  };
+  }
+  ;
 
   setSystemMediaInfo(); // 设置系统媒体信息
 
@@ -593,7 +612,7 @@ const createPlayer = async (url: string, videoType: string = '') => {
 // 摧毁播放器
 const destroyPlayer = () => {
   if (player.value) {
-    const { playerMode } = set.value;
+    const {playerMode} = set.value;
 
     playerDestroy(player.value, playerMode.type);
     player.value = null;
@@ -614,7 +633,7 @@ const setSystemMediaInfo = () => {
         title: info.value["name"],
         artist: '直播',
         artwork: [
-          { src: logoIcon, sizes: "128x128", type: "image/png" },
+          {src: logoIcon, sizes: "128x128", type: "image/png"},
         ]
       };
     } else if (type.value === 'drive') {
@@ -622,7 +641,7 @@ const setSystemMediaInfo = () => {
         title: info.value["name"],
         artist: '网盘',
         artwork: [
-          { src: logoIcon, sizes: "128x128", type: "image/png" },
+          {src: logoIcon, sizes: "128x128", type: "image/png"},
         ]
       };
     } else {
@@ -630,13 +649,14 @@ const setSystemMediaInfo = () => {
         title: info.value["vod_name"],
         artist: formatIndex(active.filmIndex).index,
         artwork: [
-          { src: info.value["vod_pic"], sizes: "128x128", type: "image/png" },
+          {src: info.value["vod_pic"], sizes: "128x128", type: "image/png"},
         ]
       }
     }
 
     navigator.mediaSession.metadata = new MediaMetadata(doc);
-  };
+  }
+  ;
 
   let title;
   if (type.value === 'film') title = `${info.value["vod_name"]} ${formatIndex(active.filmIndex).index}`;
@@ -660,10 +680,10 @@ const switchLineEvent = async (id: string) => {
 const switchAnalyzeEvent = async (id: string) => {
   active.analyzeId = id;
   if (active.filmIndex) {
-    const { site } = ext.value;
-    const { snifferMode, skipAd } = set.value;
+    const {site} = ext.value;
+    const {snifferMode, skipAd} = set.value;
 
-    let { url } = formatIndex(active.filmIndex);
+    let {url} = formatIndex(active.filmIndex);
     url = decodeURIComponent(url);
     tmp.url = tmp.sourceUrl = url;
 
@@ -671,8 +691,8 @@ const switchAnalyzeEvent = async (id: string) => {
     const response = await filmPlayAndHandleResponse(snifferMode, url, site, analyze, active.flimSource, skipAd);
     if (response?.url) {
       if (player.value) {
-        const { playerMode } = set.value;
-        playerNext(player.value, playerMode.type, { url: response!.url, mediaType: response!.mediaType! || '' });
+        const {playerMode} = set.value;
+        playerNext(player.value, playerMode.type, {url: response!.url, mediaType: response!.mediaType! || ''});
       } else {
         createPlayer(response!.url, response!.mediaType!);
       }
@@ -688,8 +708,8 @@ const fetchHistory = async (): Promise<void> => {
   if (!response.siteSource) response.siteSource = active.flimSource;
   if (!response.videoIndex) response.videoIndex = active.filmIndex;
   dataHistory.value = response;
-  const { skipTimeInStart, skipTimeInEnd } = response;
-  skipConfig.value = { skipTimeInStart, skipTimeInEnd };
+  const {skipTimeInStart, skipTimeInEnd} = response;
+  skipConfig.value = {skipTimeInStart, skipTimeInEnd};
 };
 
 // 更新历史
@@ -731,7 +751,7 @@ const filmPlayAndHandleResponse = async (snifferMode, url, site, analyze, flimSo
 
 // 初始化film
 const initFilmPlayer = async (isFirst) => {
-  const { site } = ext.value;
+  const {site} = ext.value;
   tmp.skipTime = 0;
   await getDetailInfo();
 
@@ -757,9 +777,9 @@ const initFilmPlayer = async (isFirst) => {
   }
 
   // 解析直链
-  const { snifferMode, skipAd } = set.value;
+  const {snifferMode, skipAd} = set.value;
 
-  let { url } = formatIndex(active.filmIndex);
+  let {url} = formatIndex(active.filmIndex);
   url = decodeURIComponent(url);
 
   tmp.url = tmp.sourceUrl = url;
@@ -785,7 +805,8 @@ const initPlayer = async (isFirst = false) => {
       break;
     default:
       break;
-  };
+  }
+  ;
 };
 
 // 获取播放源及剧集
@@ -815,16 +836,18 @@ const changeEvent = async (item) => {
     if (formatIndex(dataHistory.value["videoIndex"]).index !== formatIndex(active.filmIndex).index) {
       VIDEO_PROCESS_DOC.watchTime = 0;
       VIDEO_PROCESS_DOC.playEnd = false;
-    };
+    }
+    ;
   } else if (formatIndex(dataHistory.value["videoIndex"]).index !== formatIndex(active.filmIndex).index) { // 不同源
     VIDEO_PROCESS_DOC.watchTime = 0;
     VIDEO_PROCESS_DOC.playEnd = false;
-  };
+  }
+  ;
 
   await putHistory();
 
   if (tmp.preloadNext?.url && set.value.preloadNext) {
-    const { playerMode } = set.value;
+    const {playerMode} = set.value;
 
     await offPlayerTimeUpdate(player.value, playerMode.type);
     await playerNext(player.value, playerMode.type, tmp.preloadNext);
@@ -835,12 +858,15 @@ const changeEvent = async (item) => {
         playerBarrage(player.value, playerMode.type, tmp.preloadSourceUrl, options, tmp.preloadSourceUrl);
       } else {
         playerBarrage(player.value, playerMode.type, tmp.preloadBarrage, options, tmp.preloadSourceUrl);
-      };
+      }
+      ;
       tmp.preloadBarrage = [];
-    };
+    }
+    ;
     if (set.value.skipStartEnd) {
       await playerSeek(player.value, playerMode.type, skipConfig.value.skipTimeInStart);
-    };
+    }
+    ;
     setSystemMediaInfo(); // 更新系统媒体信息
     setTimeout(async () => {
       await timerUpdatePlayProcess();
@@ -862,17 +888,18 @@ const preloadNext = async (item: string) => {
 
   tmp.preloadSourceUrl = url;
 
-  const { snifferMode, skipAd } = set.value;
-  const { site } = ext.value;
-  const { flimSource } = active;
+  const {snifferMode, skipAd} = set.value;
+  const {site} = ext.value;
+  const {flimSource} = active;
   const analyze = snifferAnalyze.value;
   const response = await playHelper(snifferMode, url, site, analyze, flimSource, skipAd);
-  tmp.preloadNext = { ...response };
+  tmp.preloadNext = {...response};
 
   if (response?.url) { // 预加载弹幕
     const options = set.value.barrage;
-    tmp.preloadBarrage = await fetchBarrage(tmp.sourceUrl, options, { flimSource, filmIndex: item });
-  };
+    tmp.preloadBarrage = await fetchBarrage(tmp.sourceUrl, options, {flimSource, filmIndex: item});
+  }
+  ;
 };
 
 // 获取豆瓣影片推荐
@@ -883,8 +910,8 @@ const fetchRecommend = async () => {
 
 // 定时更新播放进度
 const timerUpdatePlayProcess = () => {
-  const { playerMode } = set.value;
-  const { siteSource } = dataHistory.value;
+  const {playerMode} = set.value;
+  const {siteSource} = dataHistory.value;
   let index = 0;
 
   const isLast = () => {
@@ -902,7 +929,8 @@ const timerUpdatePlayProcess = () => {
     if (isLast()) {  // 最后一集
       putHistory();
       return;
-    };
+    }
+    ;
 
     console.log('[player][progress] autoPlayNext');
     await changeEvent(isVisible.reverseOrder ? season.value[siteSource][index + 1] : season.value[siteSource][index - 1]);
@@ -923,14 +951,18 @@ const timerUpdatePlayProcess = () => {
         try {
           tmp.preloadLoading = true;
           await preloadNext(isVisible.reverseOrder ? season.value[siteSource][index + 1] : season.value[siteSource][index - 1]);
-        } catch (err) { };
-      };
-    };
+        } catch (err) {
+        }
+        ;
+      }
+      ;
+    }
+    ;
 
     if (getLocalStorage('player:process')) console.log(`[player][timeUpdate] - current:${currentTime}; watch:${watchTime}; duration:${duration}; percentage:${Math.trunc((currentTime / duration) * 100)}%`);
   };
 
-  playerTimeUpdate(player.value, playerMode.type, ({ currentTime, duration }) => {
+  playerTimeUpdate(player.value, playerMode.type, ({currentTime, duration}) => {
     index = season.value[siteSource].indexOf(active.filmIndex);
     onTimeUpdate(currentTime, duration);
   });
@@ -944,8 +976,8 @@ const fetchBarrage = async (url: string, options: any, active: any) => {
 
 // 获取收藏
 const fetchBinge = async () => {
-  const { id } = ext.value.site;
-  const { vod_id } = info.value;
+  const {id} = ext.value.site;
+  const {vod_id} = info.value;
   const response = await fetchBingeData(id, vod_id);
   dataBinge.value = response.data;
   isVisible.binge = !response.status;
@@ -1005,7 +1037,7 @@ const reverseOrderEvent = () => {
 
 // 推荐刷新数据
 const recommendEvent = async (item) => {
-  const { site } = ext.value;
+  const {site} = ext.value;
 
   const response = await fetchRecommendSearchHelper(site, item.vod_name);
 
@@ -1013,7 +1045,7 @@ const recommendEvent = async (item) => {
     info.value = response;
     recommend.value = [];
     dataHistory.value = {};
-    skipConfig.value = { skipTimeInStart: 30, skipTimeInEnd: 30 };
+    skipConfig.value = {skipTimeInStart: 30, skipTimeInEnd: 30};
     VIDEO_PROCESS_DOC.duration = 0;
     VIDEO_PROCESS_DOC.watchTime = 0;
     VIDEO_PROCESS_DOC.playEnd = false;
@@ -1025,7 +1057,7 @@ const recommendEvent = async (item) => {
     isVisible.binge = false;
     store.updateConfig({
       type: 'film',
-      data: { info: item, ext: ext.value }
+      data: {info: item, ext: ext.value}
     });
 
     initPlayer();
@@ -1063,7 +1095,8 @@ const shareEvent = () => {
 const downloadEvent = () => {
   downloadDialogData.value = {
     season: season.value,
-    current: tmp.url
+    current: tmp.url,
+    info: info
   };
   isVisible.download = true;
 };
@@ -1128,9 +1161,9 @@ const checkChannelListIpv6 = async (data: any[]) => {
 
 // 获取直播列表
 const getChannelList = async () => {
-  const { pageIndex, pageSize } = pagination.value;
-  const { skipIpv6 } = data.value.ext;
-  const { channelData } = iptvConfig.value;
+  const {pageIndex, pageSize} = pagination.value;
+  const {skipIpv6} = data.value.ext;
+  const {channelData} = iptvConfig.value;
 
   const res = await fetchChannelList(pageIndex, pageSize);
   pagination.value.count = res.total;
@@ -1167,13 +1200,13 @@ const getEpgList = async (url: string, name: string, date: string): Promise<void
 const changeChannelEvent = async (item) => {
   store.updateConfig({
     type: 'iptv',
-    data: { info: item, ext: ext.value }
+    data: {info: item, ext: ext.value}
   });
   info.value = item;
   const url = info.value["url"];
   if (player.value) {
-    const { playerMode } = set.value;
-    playerNext(player.value, playerMode.type, { url, mediaType: '' });
+    const {playerMode} = set.value;
+    playerNext(player.value, playerMode.type, {url, mediaType: ''});
   } else {
     createPlayer(url);
   }
@@ -1184,7 +1217,8 @@ const generateLogo = (item) => {
   let url = item.logo;
   if (ext.value.logo) {
     url = `${ext.value.logo}${item.name}.png`;
-  };
+  }
+  ;
   return url;
 }
 
@@ -1200,7 +1234,7 @@ const spiderInit = async () => {
   await spider.value.init({
     skey: 'siteKey',
     ext: [
-      { ...ext.value.site }
+      {...ext.value.site}
     ],
   });
 };
@@ -1222,8 +1256,8 @@ const changeDriveEvent = async (item) => {
   info.value = res;
   const url = info.value["url"];
   if (player.value) {
-    const { playerMode } = set.value;
-    playerNext(player.value, playerMode.type, { url, mediaType: '' });
+    const {playerMode} = set.value;
+    playerNext(player.value, playerMode.type, {url, mediaType: ''});
   } else {
     createPlayer(url);
   }
@@ -1353,7 +1387,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
         background: var(--td-bg-color-container);
         border-radius: var(--td-radius-default);
 
-        &>.system-function:first-of-type {
+        & > .system-function:first-of-type {
           margin-left: 0;
         }
 
@@ -1435,7 +1469,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
         width: 100%;
       }
 
-      .subject:hover~.dock-show {
+      .subject:hover ~ .dock-show {
         display: flex;
       }
 
@@ -2019,7 +2053,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
     width: 100%;
     overflow: auto;
 
-    &:hover>.container-header {
+    &:hover > .container-header {
       opacity: 1;
       pointer-events: auto;
       transition: opacity 0.15s linear 0s, visibility 0s linear 0s;

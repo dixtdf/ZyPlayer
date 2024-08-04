@@ -1,28 +1,25 @@
 <template>
-  <t-dialog v-model:visible="formVisible" :header="$t('pages.player.download.title')" width="508" placement="center"
-    :confirm-btn="$t('pages.player.download.copy')" :on-confirm="copyDownloadUrl" :cancel-btn="null">
+  <t-dialog v-model:visible="formVisible" :header="$t('pages.player.download.title')" width="4096" placement="center"
+            :confirm-btn="$t('pages.player.download.copy')" :on-confirm="copyDownloadUrl" :cancel-btn="null">
     <template #body>
       <div class="download-warp">
         <div class="source-warp">
           <t-select v-model="downloadSource" :placeholder="$t('pages.player.download.soureceSelect')" size="small"
-            style="width: 200px; display: inline-block" @change="downloadSourceChange">
+                    style="width: 200px; display: inline-block" @change="downloadSourceChange">
             <t-option v-for="(_, key) in formData.season" :key="key" :value="key">{{ key }}</t-option>
           </t-select>
-          <t-button size="small" theme="default" @click="copyCurrentUrl">{{ $t('pages.player.download.copyCurrentUrl')
-            }}</t-button>
+          <t-button size="small" theme="default" @click="copyCurrentUrl">{{
+              $t('pages.player.download.copyCurrentUrl')
+            }}
+          </t-button>
         </div>
         <div class="content-warp">
-          <t-transfer v-model="downloadTarget" :data="downloadEpisodes">
-            <template #title="props">
-              <div>{{ props.type === 'target' ? $t('pages.player.download.statusAwaitDownload') :
-                $t('pages.player.download.statusRequireDownload') }}</div>
-            </template>
-          </t-transfer>
+          <t-textarea v-model="downloadText" :autosize="{ minRows: 3, maxRows: 5 }"/>
         </div>
         <div class="tip-warp">
           <span>{{ $t('pages.player.download.recommendDownloaderTip') }}</span>
           <t-link theme="primary" underline href="https://github.com/HeiSir2014/M3U8-Downloader/releases/"
-            target="_blank">
+                  target="_blank">
             {{ $t('pages.player.download.recommendDownloaderName') }}
           </t-link>
         </div>
@@ -32,13 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core';
-import _ from 'lodash';
-import { ref, watch } from 'vue';
-import { MessagePlugin } from 'tdesign-vue-next';
+import {useClipboard} from '@vueuse/core';
+import {ref, watch} from 'vue';
+import {MessagePlugin} from 'tdesign-vue-next';
 
-import { t } from '@/locales';
-import { supportedFormats } from '@/utils/tool';
+import {t} from '@/locales';
+import {supportedFormats} from '@/utils/tool';
 
 const props = defineProps({
   visible: {
@@ -51,17 +47,18 @@ const props = defineProps({
       return {
         season: {},
         current: '',
+        info: null
       };
     },
   },
 });
-const { isSupported, copy } = useClipboard();
+const {isSupported, copy} = useClipboard();
 const formVisible = ref(false);
 const formData = ref(props.data);
 
 const downloadSource = ref();
 const downloadEpisodes = ref([]);
-const downloadTarget = ref([]);
+let downloadText = ref("");
 
 const emit = defineEmits(['update:visible']);
 
@@ -101,7 +98,16 @@ const copyToClipboard = (content, successMessage, errorMessage) => {
 
 // 复制下载地址列表
 const downloadSourceChange = () => {
+  let title = "未定义";
+  let info = formData.value.info;
+  if (info["vod_name"]) {
+    title = info["vod_name"];
+  } else if (info["name"]) {
+    title = info["name"];
+  }
+
   const list: any = [];
+  let txt = "";
   for (const item of formData.value.season[downloadSource.value]) {
     const [index, url] = item.split('$');
     list.push({
@@ -109,21 +115,19 @@ const downloadSourceChange = () => {
       label: index,
       disabled: false,
     });
+    txt += `N_m3u8DL-RE.exe ${url} --save-dir ${title} --save-name ${title}-${index}.mp4\n`;
   }
   downloadEpisodes.value = list;
+  downloadText.value = txt;
 };
 
 // 复制下载链接
 const copyDownloadUrl = () => {
-  const [firstUrl] = downloadTarget.value;
-
-  if (firstUrl) {
-    const downloadUrl = downloadTarget.value.join('\n');
+  if (downloadText.value) {
     const successMessage = t('pages.player.download.copySuccess');
     const errorMessage = t('pages.player.download.copyFail');
 
-    checkDownloadUrl(firstUrl);
-    copyToClipboard(downloadUrl, successMessage, errorMessage);
+    copyToClipboard(downloadText.value, successMessage, errorMessage);
     formVisible.value = false;
   } else {
     MessagePlugin.warning(t('pages.player.download.copyEmpty'));
@@ -216,7 +220,7 @@ const copyCurrentUrl = () => {
     border: var(--td-size-1) solid transparent;
   }
 
-  &__list-header+ :not(.t-transfer__list--with-search) {
+  &__list-header + :not(.t-transfer__list--with-search) {
     border-top: 1px solid var(--td-border-level-1-color);
   }
 
