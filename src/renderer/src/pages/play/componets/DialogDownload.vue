@@ -101,15 +101,18 @@ const downloadSourceChange = () => {
     title = info["name"];
   }
 
+  title = title.replaceAll(" ", "");
+
   const list: any = [];
   let txt = "";
   for (const item of formData.value.season[downloadSource.value]) {
-    const [index, url] = item.split('$');
+    let [index, url] = item.split('$');
     list.push({
       value: url,
       label: index,
       disabled: false,
     });
+    index = index.replaceAll(" ", "");
     txt += `N_m3u8DL-RE.exe ${url} --save-dir ${title} --save-name ${title}-${index}.mp4\n`;
   }
   downloadEpisodes.value = list;
