@@ -1,14 +1,14 @@
-import { electronApp, is, platform } from '@electron-toolkit/utils';
-import { exec } from 'child_process';
-import { app, BrowserWindow, globalShortcut, ipcMain, nativeTheme, shell } from 'electron';
+import {electronApp, is, platform} from '@electron-toolkit/utils';
+import {exec, spawn} from 'child_process';
+import {app, BrowserWindow, globalShortcut, ipcMain, nativeTheme, shell} from 'electron';
 import fs from 'fs-extra';
-import { join } from 'path';
 
+import path, {join} from 'path';
 import logger from './logger';
-import { setting } from './db/service';
+import {setting} from './db/service';
 import puppeteerInElectron from '../utils/pie';
-import { toggleWindowVisibility } from '../utils/tool';
-import { createMain, createPlay, getWin } from './winManger';
+import {toggleWindowVisibility} from '../utils/tool';
+import {createMain, createPlay, getWin} from './winManger';
 
 const tmpDir = async (path: string) => {
   try {
@@ -24,7 +24,77 @@ const tmpDir = async (path: string) => {
   }
 };
 
+function runCommand(event, command, element) {
+  return new Promise((resolve, reject) => {
+    const child = spawn('cmd.exe', ['/c', `chcp 65001 && ${command}`], {
+      shell: true // 使用 shell 运行命令
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (data) => {
+      let msg = data.toString();
+      stdout += msg;
+      console.log('stdout:' + msg);
+      element.msg = stdout;
+      element.status = 1;
+      event.sender.send('download-progress', element);
+    });
+
+    child.stderr.on('data', (data) => {
+      let msg = data.toString();
+      stderr += msg;
+      console.log('stderr:' + msg);
+      element.msg = stderr;
+      element.status = 1;
+      event.sender.send('download-progress', element);
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        console.log('close');
+        element.msg = stdout;
+        element.status = 0;
+        event.sender.send('download-progress', element);
+        resolve(stdout);
+      } else {
+        let msg = `命令失败，退出码: ${code}\n错误输出: ${stderr}`;
+        console.log('Error:' + msg);
+        element.msg = msg;
+        element.status = 1;
+        event.sender.send('download-progress', element);
+        reject(new Error(msg));
+      }
+    });
+
+  });
+}
+
 const ipcListen = () => {
+  ipcMain.on('exec-download', async (event, params: any) => {
+    let parse = JSON.parse(params);
+
+    for (let key in parse) {
+      let element = parse[key];
+      element.msg = ''
+      let command = `"C:\\Program Files\\N_m3u8DL-RE_Beta_win-x64\\N_m3u8DL-RE.exe" "${element.value}" --save-dir "C:\\Program Files\\N_m3u8DL-RE_Beta_win-x64\\${element.title}" --save-name "${element.title}-${element.label}"`;
+      const file = path.join('C:\\Program Files\\N_m3u8DL-RE_Beta_win-x64', element.title, `${element.title}-${element.label}`);
+      fs.access(file, fs.constants.F_OK, (err) => {
+        if (!err) {
+          fs.unlink(file, (err) => {
+            if (err) {
+              console.error('删除文件时出错:', err);
+            } else {
+              console.log('文件已删除');
+            }
+          });
+        }
+      });
+      await runCommand(event, command, element);
+    }
+  });
+
   ipcMain.on('uninstallShortcut', () => {
     logger.info(`[ipcMain] globalShortcut unregisterAll`);
     globalShortcut.unregisterAll();
@@ -79,7 +149,7 @@ const ipcListen = () => {
   });
 
   ipcMain.handle('ffmpeg-thumbnail', async (_, url, key) => {
-    let uaState: any = setting.find({ key: 'ua' }).value;
+    let uaState: any = setting.find({key: 'ua'}).value;
     const formatPath = is.dev
       ? join(process.cwd(), 'thumbnail', `${key}.jpg`)
       : join(app.getPath('userData'), 'thumbnail', `${key}.jpg`);
@@ -117,7 +187,7 @@ const ipcListen = () => {
 
   ipcMain.handle('ffmpeg-installed-check', async () => {
     try {
-      const { stdout } = await exec('ffmpeg -version');
+      const {stdout} = await exec('ffmpeg -version');
       logger.info(`[ipcMain] FFmpeg is installed. ${stdout}`);
       return true;
     } catch (err) {
@@ -127,7 +197,7 @@ const ipcListen = () => {
   });
 
   ipcMain.handle('sniffer-media', async (_, url, run_script, init_script, customRegex) => {
-    const ua = setting.find({ key: 'ua' }).value;
+    const ua = setting.find({key: 'ua'}).value;
     const res = await puppeteerInElectron(url, run_script, init_script, customRegex, ua);
     return res;
   });
@@ -187,7 +257,7 @@ const ipcListen = () => {
     }
   });
 
-  ipcMain.on('updateShortcut', (_, { shortcut }) => {
+  ipcMain.on('updateShortcut', (_, {shortcut}) => {
     logger.info(`[ipcMain] storage-shortcuts: ${shortcut}`);
     globalShortcut.unregisterAll();
     logger.info(`[ipcMain] globalShortcut-install: ${shortcut}`);
@@ -246,4 +316,4 @@ const ipcListen = () => {
   });
 };
 
-export { ipcListen, tmpDir };
+export {ipcListen, tmpDir};

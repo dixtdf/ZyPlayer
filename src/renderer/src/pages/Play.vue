@@ -65,7 +65,12 @@
         <system-control class="mg-left window"/>
       </div>
     </div>
-    <dialog-download-view ref="dialogDownloadView" :data="downloadDialogData"/>
+    <t-dialog v-model:visible="isVisible.download" :mode="'full-screen'" closeBtn>
+      <dialog-download-view ref="dialogDownloadView" :data="downloadDialogData"/>
+      <template #footer>
+        <t-button @click="isVisible.download = false">关闭</t-button>
+      </template>
+    </t-dialog>
     <div class="container-main">
       <div class="player">
         <div class="container-player" :class='["subject", isVisible.aside ? "subject-ext" : ""]'>
@@ -172,10 +177,10 @@
                   <span class="tip">{{ $t('pages.player.film.like') }}</span>
                 </div>
                 <div class="dot"></div>
-                <!--                <div class="func-item download" @click="downloadEvent">-->
-                <!--                  <download-icon class="icon"/>-->
-                <!--                  <span class="tip">{{ $t('pages.player.film.download') }}</span>-->
-                <!--                </div>-->
+                <div class="func-item download" @click="downloadEvent">
+                  <download-icon class="icon" />
+                  <span class="tip">{{ $t('pages.player.film.download') }}</span>
+                </div>
                 <div class="dot"></div>
                 <div class="func-item share" @click="shareEvent">
                   <share-popup v-model:visible="isVisible.share" :data="shareData">
@@ -1439,7 +1444,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
   }
 
   .container-main {
-    height: calc(100vh - 220px);
+    height: calc(100% - var(--td-comp-size-xxxl));
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -1718,7 +1723,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
 
         .anthology-contents-scroll {
           position: relative;
-          height: calc(100vh - 56px - 10px - 111px - 160px);
+          height: calc(100vh - 56px - 10px - 111px);
           overflow-y: auto;
           overflow-x: hidden;
 
@@ -2147,7 +2152,7 @@ window.electron.ipcRenderer.on('destroy-playerWindow', () => {
     }
 
     .container-main {
-      height: calc(100vh - 220px);
+      height: 100vh;
 
       .player {
         .dock-show {

@@ -5,28 +5,29 @@
                 style="width: 200px; display: inline-block" @change="downloadSourceChange">
         <t-option v-for="(_, key) in formData.season" :key="key" :value="key">{{ key }}</t-option>
       </t-select>
-      <t-button size="small" theme="default" @click="copyCurrentUrl">{{
-          $t('pages.player.download.copyCurrentUrl')
-        }}
-      </t-button>
+      <div>
+        <t-button size="small" theme="default" @click="startDownload" v-if="selectedRowKeys.length>0">下载选中</t-button>
+      </div>
     </div>
     <div class="content-warp">
-      <t-textarea v-model="downloadText" :autosize="{ minRows: 3, maxRows: 5 }"/>
-    </div>
-    <div class="tip-warp">
-      <span>{{ $t('pages.player.download.recommendDownloaderTip') }}</span>
-      <t-link theme="primary" underline href="https://github.com/HeiSir2014/M3U8-Downloader/releases/"
-              target="_blank">
-        {{ $t('pages.player.download.recommendDownloaderName') }}
-      </t-link>
+      <t-table
+        row-key="label"
+        :columns="columns"
+        :data="downloadData"
+        :selected-row-keys="selectedRowKeys"
+        :select-on-row-click="true"
+        lazy-load
+        @select-change="reHandleSelectChange"
+      >
+      </t-table>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {useClipboard} from '@vueuse/core';
-import {ref, watch} from 'vue';
-import {MessagePlugin} from 'tdesign-vue-next';
+import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import {MessagePlugin, Tag, Textarea} from 'tdesign-vue-next';
 
 import {t} from '@/locales';
 import {supportedFormats} from '@/utils/tool';
@@ -53,7 +54,63 @@ const formData = ref(props.data);
 
 const downloadSource = ref();
 const downloadEpisodes = ref([]);
-let downloadText = ref("");
+
+const statusNameListMap = {
+  "-2": {label: '未开始', theme: 'success'},
+  "-1": {label: '出错', theme: 'success'},
+  "0": {label: '完成', theme: 'success'},
+  "1": {label: '处理中', theme: 'danger'},
+};
+
+const columns = ref([
+  {colKey: 'row-select', type: 'multiple', width: 50,},
+  {colKey: 'title', title: '标题', width: 150,},
+  {colKey: 'label', title: '集数', width: 150,},
+  {
+    colKey: 'msg', title: '消息',
+    cell: (h, {row}) => {
+      // 使用 `h` 函数来创建 t-textarea 组件
+      return h(
+        Textarea,
+        {
+          modelValue: row.msg,
+          'onUpdate:modelValue': (value) => {
+            row.msg = value
+          },
+          //autosize: true
+          autosize: {minRows: 5, maxRows: 10}
+        }
+      );
+    },
+  },
+  {
+    colKey: 'status',
+    title: '状态',
+    cell: (h, {row}) => {
+      return h(Tag, {label: statusNameListMap[row.status].label, theme: statusNameListMap[row.status].theme},
+        {
+          default: () => [
+            h('span', {}, statusNameListMap[row.status].label)
+          ]
+        });
+    },
+    width: 150,
+  },
+  // {
+  //   colKey: 'progress',
+  //   title: '进度',
+  //   cell: (h, {row}) => {
+  //     return h(Progress, {percentage: row.progress, theme: 'plump'});
+  //   },
+  //   width: 150,
+  // },
+]);
+let downloadData = ref([]);
+const selectedRowKeys = ref([]);
+
+const reHandleSelectChange = (value, ctx) => {
+  selectedRowKeys.value = value;
+};
 
 const emit = defineEmits(['update:visible']);
 
@@ -104,33 +161,49 @@ const downloadSourceChange = () => {
   title = title.replaceAll(" ", "");
 
   const list: any = [];
-  let txt = "";
   for (const item of formData.value.season[downloadSource.value]) {
     let [index, url] = item.split('$');
+    index = index.replaceAll(" ", "");
     list.push({
       value: url,
       label: index,
+      title: title,
+      msg: '',
+      status: -2,
+      // progress: 0,
       disabled: false,
     });
-    index = index.replaceAll(" ", "");
-    txt += `N_m3u8DL-RE.exe ${url} --save-dir ${title} --save-name ${title}-${index}.mp4\n`;
   }
   downloadEpisodes.value = list;
-  downloadText.value = txt;
+  downloadData.value = list;
 };
 
 // 复制下载链接
 const copyDownloadUrl = () => {
-  if (downloadText.value) {
+  if (downloadData.value) {
     const successMessage = t('pages.player.download.copySuccess');
     const errorMessage = t('pages.player.download.copyFail');
 
-    copyToClipboard(downloadText.value, successMessage, errorMessage);
+    copyToClipboard(downloadData.value, successMessage, errorMessage);
     formVisible.value = false;
   } else {
     MessagePlugin.warning(t('pages.player.download.copyEmpty'));
   }
 };
+
+const startDownload = () => {
+  let keys = selectedRowKeys.value;
+  let sendData = []
+  for (let key of keys) {
+    for (let v of downloadData.value) {
+      if (v.label == key) {
+        sendData.push(v);
+        break;
+      }
+    }
+  }
+  window.electron.ipcRenderer.send('exec-download', JSON.stringify(sendData));
+}
 
 // 复制当前播放地址
 const copyCurrentUrl = () => {
@@ -152,6 +225,23 @@ const init = () => {
   downloadSourceChange();
 }
 
+const downloadProgressHandler = (event, params) => {
+  for (let e of downloadData.value) {
+    if (e.label == params.label) {
+      e.msg = params.msg;
+      e.status = params.status;
+      break;
+    }
+  }
+  console.log('download-progress', params);
+};
+onMounted(() => {
+  window.electron.ipcRenderer.on('download-progress', downloadProgressHandler);
+});
+onBeforeUnmount(() => {
+  window.electron.ipcRenderer.removeListener('download-progress', downloadProgressHandler);
+});
+
 defineExpose({
   init
 });
@@ -170,6 +260,9 @@ defineExpose({
   }
 
   .content-warp {
+    overflow: auto;
+    height: 70vh;
+    overflow: auto;
     margin: var(--td-comp-margin-s) 0;
 
     :deep(.t-button + .t-button) {
