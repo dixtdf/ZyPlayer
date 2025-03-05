@@ -280,7 +280,7 @@ const shareFormData = ref({
   url: '',
   provider: 'zyfun',
 });
-const downloadFormData = ref({ season: {}, current: '' });
+const downloadFormData = ref({ info: '',season: {}, current: '' });
 const settingFormData = ref({
   skipHeadAndEnd: false,
   skipTimeInStart: 30,
@@ -452,7 +452,15 @@ const shareEvent = () => {
 
 // 下载 dialog 数据
 const downloadEvent = () => {
+  let info = infoConf.value
+  let title = "";
+  if (info["vod_name"]) {
+    title = info["vod_name"];
+  } else if (info["name"]) {
+    title = info["name"];
+  }
   downloadFormData.value = {
+    info: title,
     season: seasonData.value,
     current: videoData.value.url,
   };
