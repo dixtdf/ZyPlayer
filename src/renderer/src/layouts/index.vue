@@ -1,9 +1,9 @@
 <template>
   <div class="layout">
     <t-layout>
-      <t-aside key="side" :class="`${prefix}-aside`">
-        <layout-side-nav :nav-data="sideMenu" />
-      </t-aside>
+<!--      <t-aside key="side" :class="`${prefix}-aside`">-->
+<!--        <layout-side-nav :nav-data="sideMenu" />-->
+<!--      </t-aside>-->
       <t-layout>
         <t-header height=60 :class="`${prefix}-header`">
           <layout-header />

@@ -1,30 +1,13 @@
 <template>
   <t-dialog v-model:visible="formVisible" :header="$t('pages.player.download.title')" width="508" placement="center"
-    :confirm-btn="$t('pages.player.download.copy')" :on-confirm="copyDownloadUrl" :cancel-btn="null">
+    :confirm-btn="null" :cancel-btn="null">
     <template #body>
       <div class="download-warp">
         <div class="source-warp">
           <t-select v-model="downloadSource" :placeholder="$t('pages.player.download.soureceSelect')" size="small"
-            style="width: 200px; display: inline-block" @change="downloadSourceChange">
+            style="width: 100%; display: inline-block" @change="downloadSourceChange">
             <t-option v-for="(_, key) in formData.season" :key="key" :value="key">{{ key }}</t-option>
           </t-select>
-          <t-button size="small" theme="default" @click="copyCurrentUrl">{{ $t('pages.player.download.copyCurrentUrl')
-            }}</t-button>
-        </div>
-        <div class="content-warp">
-          <t-transfer v-model="downloadTarget" :data="downloadEpisodes">
-            <template #title="props">
-              <div>{{ props.type === 'target' ? $t('pages.player.download.statusAwaitDownload') :
-                $t('pages.player.download.statusRequireDownload') }}</div>
-            </template>
-          </t-transfer>
-        </div>
-        <div class="tip-warp">
-          <span>{{ $t('pages.player.download.recommendDownloaderTip') }}</span>
-          <t-link theme="primary" underline href="https://github.com/HeiSir2014/M3U8-Downloader/releases/"
-            target="_blank">
-            {{ $t('pages.player.download.recommendDownloaderName') }}
-          </t-link>
         </div>
       </div>
     </template>
@@ -47,12 +30,10 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    default: () => {
-      return {
-        season: {},
-        current: '',
-      };
-    },
+    default: {
+      season: {},
+      current: '',
+    }
   },
 });
 const { isSupported, copy } = useClipboard();
@@ -101,16 +82,21 @@ const copyToClipboard = (content, successMessage, errorMessage) => {
 
 // 复制下载地址列表
 const downloadSourceChange = () => {
-  const list: any = [];
+  let str = "";
   for (const item of formData.value.season[downloadSource.value]) {
     const [index, url] = item.split('$');
-    list.push({
-      value: url,
-      label: index,
-      disabled: false,
-    });
+    str+=`"N_m3u8DL-RE.exe" "${url}" --save-dir "${formData.value.info}" --save-name "${formData.value.info}-${index}" \r\n`;
   }
-  downloadEpisodes.value = list;
+
+  const blob = new Blob([str], { type: "application/text" });
+  const blobUrl = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = blobUrl;
+  a.download = `${formData.value.info}.bat`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(blobUrl);
 };
 
 // 复制下载链接

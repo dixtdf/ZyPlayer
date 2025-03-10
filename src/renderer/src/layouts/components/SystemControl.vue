@@ -1,5 +1,7 @@
 <template>
-  <title-bar overlay class="system-controls" v-if="platform !== 'darwin'"></title-bar>
+  <div style="width: 102px;">
+    <title-bar overlay class="system-controls" v-if="platform !== 'darwin'"></title-bar>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -10,8 +12,10 @@ const { platform } = process;
 
 <style lang="less" scoped>
 .system-controls {
+  margin-right: 4px;
+  margin-top: 14px;
   width: 102px;
-  height: 100%;
+  height: 30px;
   overflow: hidden;
   background: var(--td-bg-color-container);
   border-radius: var(--td-radius-default);

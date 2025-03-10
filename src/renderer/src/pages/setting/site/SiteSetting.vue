@@ -37,7 +37,7 @@
       </div>
     </div>
     <t-table row-key="id" height="calc(100vh - 172px)" :data="siteTableConfig.data" :sort="siteTableConfig.sort"
-      :filter-value="siteTableConfig.filter" :columns="COLUMNS" :hover="true" :pagination="pagination"
+      :filter-value="siteTableConfig.filter" :columns="COLUMNS" :hover="true"
       @sort-change="rehandleSortChange" @filter-change="rehandleFilterChange" @select-change="rehandleSelectChange"
       @page-change="rehandlePageChange">
       <template #name="{ row }">

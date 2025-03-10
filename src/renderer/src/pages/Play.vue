@@ -448,7 +448,7 @@ const snifferAnalyze = computed(() => {
 const info = ref(data.value.info) as any;
 const ext = ref(data.value.ext) as any;
 
-const downloadDialogData = ref({ season: '', current: '' });
+const downloadDialogData = ref({ info: '', season: '', current: '' });
 
 const player = shallowRef(null); // 重要, proxy对象art播放器报错
 
@@ -1061,7 +1061,14 @@ const shareEvent = () => {
 
 //下载 dialog 数据
 const downloadEvent = () => {
+  let title = "";
+  if (info.value["vod_name"]) {
+    title = info.value["vod_name"];
+  } else if (info.value["name"]) {
+    title = info.value["name"];
+  }
   downloadDialogData.value = {
+    info: title,
     season: season.value,
     current: tmp.url
   };

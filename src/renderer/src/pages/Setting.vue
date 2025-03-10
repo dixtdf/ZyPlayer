@@ -58,18 +58,6 @@ const settingNav = computed(() => {
     }, {
       id: 'siteSource',
       name: t('pages.setting.nav.siteSource')
-    }, {
-      id: 'iptvSource',
-      name: t('pages.setting.nav.iptvSource')
-    }, {
-      id: 'analyzeSource',
-      name: t('pages.setting.nav.analyzeSource')
-    }, {
-      id: 'driveSource',
-      name: t('pages.setting.nav.driveSource')
-    }, {
-      id: 'editSource',
-      name: t('pages.setting.nav.editSource')
     }
   ]
 });

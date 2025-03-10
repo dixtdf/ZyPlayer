@@ -19,7 +19,6 @@ declare module 'vue' {
     TBreadcrumb: typeof import('tdesign-vue-next')['Breadcrumb']
     TBreadcrumbItem: typeof import('tdesign-vue-next')['BreadcrumbItem']
     TButton: typeof import('tdesign-vue-next')['Button']
-    TCard: typeof import('tdesign-vue-next')['Card']
     TCol: typeof import('tdesign-vue-next')['Col']
     TCollapse: typeof import('tdesign-vue-next')['Collapse']
     TCollapsePanel: typeof import('tdesign-vue-next')['CollapsePanel']
@@ -36,7 +35,6 @@ declare module 'vue' {
     TIcon: typeof import('tdesign-vue-next')['Icon']
     TImage: typeof import('tdesign-vue-next')['Image']
     TInput: typeof import('tdesign-vue-next')['Input']
-    TInputAdornment: typeof import('tdesign-vue-next')['InputAdornment']
     TInputNumber: typeof import('tdesign-vue-next')['InputNumber']
     TLayout: typeof import('tdesign-vue-next')['Layout']
     TLink: typeof import('tdesign-vue-next')['Link']
@@ -62,7 +60,6 @@ declare module 'vue' {
     TTagInput: typeof import('tdesign-vue-next')['TagInput']
     TTextarea: typeof import('tdesign-vue-next')['Textarea']
     TTooltip: typeof import('tdesign-vue-next')['Tooltip']
-    TTransfer: typeof import('tdesign-vue-next')['Transfer']
     TUpload: typeof import('tdesign-vue-next')['Upload']
   }
 }

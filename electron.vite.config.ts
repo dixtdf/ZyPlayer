@@ -97,6 +97,8 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         }),
       ],
       server: {
+        host: '127.0.0.1',
+        port: 5173,
         strictPort: true, // 端口冲突自动分配端口
         proxy: {
           [VITE_API_URL_PREFIX]: {

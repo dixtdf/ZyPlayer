@@ -7,10 +7,6 @@
     </div>
     <div class="right no-drag">
       <div class="system-functions">
-        <sponsor class="system-function" />
-        <just-look class="system-function" />
-        <language class="system-function" />
-        <system-skin class="system-function" />
         <system-config class="system-function" />
       </div>
       <system-control class="window mg-left" />

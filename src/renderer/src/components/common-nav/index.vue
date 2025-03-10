@@ -31,9 +31,6 @@
             </li>
           </ul>
         </div>
-        <div class="nav-sub-tab-bottom">
-          <slot name="customize"></slot>
-        </div>
       </div>
     </div>
 
