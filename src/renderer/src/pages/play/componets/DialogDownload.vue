@@ -82,7 +82,7 @@ const copyToClipboard = (content, successMessage, errorMessage) => {
 
 // 复制下载地址列表
 const downloadSourceChange = () => {
-  let str = "";
+  let str = "chcp 65001\r\n";
   for (const item of formData.value.season[downloadSource.value]) {
     const [index, url] = item.split('$');
     str+=`"N_m3u8DL-RE.exe" "${url}" --save-dir "${formData.value.info}" --save-name "${formData.value.info}-${index}" \r\n`;
